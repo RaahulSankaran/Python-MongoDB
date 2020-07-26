@@ -40,11 +40,15 @@ def add_testdb():
     name = request.json['name']
     jobTitle = request.json['jobTitle']
     emailAddress = request.json['emailAddress']
-    salary = request.json['salary']
-    testdb_id = testdb.insert({'name':name,'jobTitle':jobTitle,'emailAddress':emailAddress,'salary':salary})
-    new_testdb = testdb.find_one({'_id':testdb_id})
-    output = {'name':new_testdb['name'],'jobTitle':new_testdb['jobTitle'],'emailAddress':new_testdb['emailAddress'],'salary':new_testdb['salary']}
-    return jsonify({'result': output['name'] + 'Added Sucessfully'})
+    salary = request.json['salary']       
+
+    try:
+        testdb_name = testdb.insert({'name':name,'jobTitle':jobTitle,'emailAddress':emailAddress,'salary':salary})
+        new_testdb = testdb.find_one({'_name':testdb_name})
+        output = {'name':new_testdb['name'],'jobTitle':new_testdb['jobTitle'],'emailAddress':new_testdb['emailAddress'],'salary':new_testdb['salary']}
+        return jsonify({'result': output['name'] + 'Added Sucessfully'})
+    finally:
+        return ({'msg': 'already exists'})
 
 
 
